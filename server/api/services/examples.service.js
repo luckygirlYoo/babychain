@@ -15,6 +15,9 @@ class ExamplesService {
   create(name) {
     return db.insert(name);
   }
+  echo(Message){
+    return Promise.resolve("your message is " + Message);
+  }
 }
 
 export default new ExamplesService();

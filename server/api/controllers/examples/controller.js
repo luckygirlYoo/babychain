@@ -23,5 +23,12 @@ export class Controller {
         .location(`/api/v1/examples/${r.id}`)
         .json(r));
   }
+
+  echo(req, res){
+    ExamplesService
+    .echo(req.body.Message)
+    .then(r=>res.json(r));
+
+  }
 }
 export default new Controller();

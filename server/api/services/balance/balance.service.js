@@ -21,6 +21,16 @@ class BalanceService {
     return Promise.resolve(fbClient.invokeChaincode('balance', 'move', args, []));
   }
 
+  modify(req, res) {
+    l.info(`${this.constructor.name}.byId(${req})`);
+    const args = [];
+
+    args.push(req.body.name);
+    args.push(req.body.balance.toString());
+
+    return Promise.resolve(fbClient.invokeChaincode('balance', 'modify', args, []));
+  }
+
   addUser(req, res) {
     l.info(`${this.constructor.name}.byId(${req})`);
     const args = [];

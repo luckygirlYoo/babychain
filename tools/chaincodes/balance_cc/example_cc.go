@@ -96,6 +96,10 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		// Add an entity to its state
 		return t.add(stub, args)
 	}
+	if function == "modify" {
+		// modify an entity to its state
+		return t.modify(stub, args)
+	}
 
 	logger.Errorf("Unknown action, check the first argument, must be one of 'delete', 'query', or 'move'. But got: %v", args[0])
 	return shim.Error(fmt.Sprintf("Unknown action, check the first argument, must be one of 'delete', 'query', or 'move'. But got: %v", args[0]))
@@ -157,6 +161,55 @@ func (t *SimpleChaincode) move(stub shim.ChaincodeStubInterface, args []string) 
 
     return shim.Success([]byte("move succeed"))
 }
+
+func (t *SimpleChaincode) modify(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	logger.Info("########### example_cc modify start! ###########")
+	// must be an invoke
+	var KeyOfAsset string    // Entities
+	var ValOfAsset string // Asset holdings
+	//var X int          // Transaction value
+	var err error
+    logger.Info("########### 111111111111111111111 ###########")
+	if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting 2, function followed by 1 names and 1 value")
+	}
+
+	KeyOfAsset = args[0]
+	ValOfAsset = args[1]
+    logger.Info("########### 2222222222222222222 ###########")
+	// Get the state from the ledger
+	// TODO: will be nice to have a GetAllState call to ledger
+	Avalbytes, err := stub.GetState(KeyOfAsset)
+	logger.Info("########### 33333333333333333333 ###########")
+	if err != nil {
+		return shim.Error("Failed to get state of "+KeyOfAsset)
+	}
+	if Avalbytes == nil {
+		return shim.Error("Entity not found")
+	}
+	logger.Info("########### 4444444444444444444444 ###########")
+	ValOfAsset, _ = strconv.Atoi(string(Avalbytes))
+    logger.Info("########### 555555555555555555555 ###########")
+	// Perform the execution
+	//X, err = strconv.Atoi(args[2])
+	logger.Info("########### 666666666666666666666 ###########")
+	//if err != nil {
+	//	return shim.Error("Invalid transaction amount, expecting a integer value")
+	//}
+	logger.Info("########### 7777777777777777777777 ###########")
+	//Aval = Aval - X
+	//Bval = Bval + X
+	//logger.Infof("Aval = %d, Bval = %d\n", Aval, Bval)
+
+	// Write the state back to the ledger
+	err = stub.PutState(A, []byte(strconv.Itoa(ValOfAsset)))
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+    return shim.Success([]byte("modify succeed"))
+}
+
 
 func (t *SimpleChaincode) add(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	// must be an invoke

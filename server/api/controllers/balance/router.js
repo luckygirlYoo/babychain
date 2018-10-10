@@ -11,4 +11,5 @@ export default express
   .Router()
   .get('/:id', controller.getBalance)
   .post('/', controller.move)
-  .post('/user', controller.addUser);
+  .post('/user', controller.addUser)
+  .post('/modify',controller.modify);

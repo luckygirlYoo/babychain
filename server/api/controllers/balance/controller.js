@@ -19,6 +19,15 @@ export class Controller {
       });
   }
 
+  modify(req, res) {
+    BalanceService
+      .modify(req, res)
+      .then(r => {
+        if (r) res.json(r);
+        else res.status(404).end();
+      });
+  }
+
   addUser(req, res) {
     BalanceService
       .addUser(req, res)

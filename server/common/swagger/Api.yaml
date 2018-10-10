@@ -50,6 +50,16 @@ definitions:
         type: string
       balance:
         type: integer
+ 
+  MessageBody:
+    type: object
+    title: example
+    required:
+      - Message
+    properties:
+      Message:
+        type: string
+        example: Message
 
 paths:
   /examples:
@@ -91,6 +101,24 @@ paths:
         404:
           description: Example not found
 
+  /examples/echo:
+    post:
+      tags:
+        - Examples
+      parameters:
+        - name: Message
+          in: body
+          required: true
+          description: Your Meesage
+          type: string
+          schema: 
+             $ref : "#/definitions/MessageBody"
+      responses:
+        200:
+          description: Return the example with the specified id
+        404:
+          description: Example not found
+
   /balance/{id}:
     get:
       tags:
@@ -121,6 +149,22 @@ paths:
       responses:
         200:
           description: Returns User's Current Balance
+
+  /balance/modify:
+    post:
+      tags:
+      - Balance
+      parameters:
+      - name: modify value
+        in: body
+        description: The key of the asset to change current value
+        required: true
+        schema:
+          $ref: "#/definitions/move"
+      description: Get Current Value
+      responses:
+        200:
+          description: Returns User's Current Value
 
   /balance:
     post:
